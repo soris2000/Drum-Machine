@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drum Machine</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Don't use this in production: -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  </head>
+  <body >
+    <div id="root"></div>
+    <script type="text/babel">
+
+const traks=[
+    {
+        keyCode:81,
+        keyTrigger:'Q',
+        id:'Heater-1',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Heater-1.mp3'
+    },
+    {
+        keyCode:87,
+        keyTrigger:'W',
+        id:'Heater-2',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Heater-2.mp3'
+    },
+    {
+        keyCode:69,
+        keyTrigger:'E',
+        id:'Heater-3',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Heater-3.mp3'
+    },
+    {
+        keyCode:65,
+        keyTrigger:'A',
+        id:'Heater-4',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Heater-4_1.mp3'
+    },
+    {
+        keyCode:83,
+        keyTrigger:'S',
+        id:'Clap',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Heater-6.mp3'
+    },
+    {
+        keyCode:68,
+        keyTrigger:'D',
+        id:'Open-HH',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Dsc_Oh.mp3'
+    },
+    {
+        keyCode:90,
+        keyTrigger:'Z',
+        id:"Kic-n'Hat",
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Kick_n_Hat.mp3'
+    },
+    {
+        keyCode:88,
+        keyTrigger:'X',
+        id:'KICK',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/RP4_KICK_1.mp3'
+    },
+    {
+        keyCode:67,
+        keyTrigger:'C',
+        id:'Closed-HH',
+        src:'https://s3.amazonaws.com/freecodecamp/drums/Cev_H2.mp3'
+    },
+
+]  
+    
+      class DrumMachine extends React.Component {
+        constructor(props) {
+          super(props);
+          this.state={
+            display:'Drum Machine'
+          }
+          this.updateDisplay = this.updateDisplay.bind(this);
+        }
+        updateDisplay(text) {
+    this.setState({
+      display: text
+    });
+  }
+        
+        render() {
+          
+          return (
+            <div id="drum-machine"   className="container" >
+              <p id="display">{this.state.display}</p>
+              <div   className="drum-keypad">
+                
+                {
+                    traks.map((item,idx)=>{
+
+                       return <Pad
+                         key={idx}
+                         item={item}
+                         updateDisplay={this.updateDisplay}/>
+                       
+                    })
+                  
+
+                } 
+
+              </div>
+
+            </div>
+          );
+        }
+      }
+
+      class Pad extends React.Component {
+        constructor(props) {
+    super(props);
+    this.audioHandler = React.createRef();
+    this.onItemClicked = this.onItemClicked.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this.onKeyUp = this.onKeyUp.bind(this);
+  }
+
+  onItemClicked() {
+    const text = this.props.item.id.replace(/-/g, " ");
+    const audio = this.audioHandler.current;
+
+    this.props.updateDisplay(text);
+    audio.currentTime = 0;
+    audio.play();
+  }
+
+
+  onKeyDown(event) {
+    const root = ReactDOM.findDOMNode(this);
+
+    if (event.keyCode === this.props.item.keyCode) {
+      root.classList.add("active");
+      this.onItemClicked();
+    }
+  }
+
+
+  onKeyUp(event) {
+    const root = ReactDOM.findDOMNode(this);
+
+    if (event.keyCode === this.props.item.keyCode) {
+      setTimeout(() => {
+        root.classList.remove("active");
+      }, 33);
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyDown);
+    document.addEventListener('keyup', this.onKeyUp);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.onKeyDown);
+    document.removeEventListener('keyup', this.onKeyUp);
+  }
+
+
+  render() {
+    const item=this.props.item;
+    return (
+
+    <div className="drum-pad"
+                 id={item.id}
+                 onClick={this.onItemClicked}
+                >
+                <audio className="clip" id={item.keyTrigger}  src={item.src} ref={this.audioHandler}></audio>
+                {item.keyTrigger}
+                </div>
+    );
+  }
+
+      }
+
+      function MyApp() {
+        return (
+          <div>
+            <DrumMachine />
+          </div>
+        );
+      }
+      const container = document.getElementById("root");
+      const root = ReactDOM.createRoot(container);
+      root.render(<MyApp />);
+    </script>
+  </body>
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+    crossorigin="anonymous"
+  ></script>
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</html>
+

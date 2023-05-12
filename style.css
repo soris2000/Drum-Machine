@@ -1,0 +1,54 @@
+body{
+    background-color: darkslategrey;
+    height: 100vh;
+    padding:2rem;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+}
+
+.container{
+    background-color: cadetblue;
+    width: 600px;
+    padding: 20px;
+    margin-bottom: 20px;
+    color: white;
+    text-align: center;
+    border-radius: 2px;
+}
+#display{
+    background-color: rgba(4, 37, 37, 0.616);
+    padding: 20px;
+    font-size: 2rem;
+    border-radius: 3px;
+}
+
+.drum-keypad{
+    background-color: rgba(4, 37, 37, 0.616);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content:center;
+    align-items: center;
+    border-radius: 5px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+.drum-pad{
+    width: 30%;
+    background-color: brown;
+    margin: 10px;
+    margin-right: 0px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.drum-pad:hover{
+    cursor: pointer;
+  /*  background-color: rgb(227, 37, 37);*/
+}
+.drum-pad.active,
+.drum-pad:active{
+    background-color: rgb(227, 37, 37);
+}
